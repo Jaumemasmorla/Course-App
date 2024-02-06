@@ -1,10 +1,13 @@
-import { useState, useEffect,useId } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import React from 'react';
 
 
 const fetchSchedule = async () => {
+
+  /*en el fetch de la URL es donde empiezan los problemas 
+  ya que no sale la lista completa*/
   const url = 'https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php';
   const response = await fetch(url);
   if (!response.ok) throw response;
@@ -43,12 +46,15 @@ const Banner = ({ title }) => (
 
 const terms = { F: 'Fall', W: 'Winter', S: 'Spring'};
 
-const getCourseTerm = courses => (
-  terms[course.id.charAt(0)]
-);
 
+
+/*getcourseterm modificado para sacar nulls*/
+const getCourseTerm = course => (
+  course && course.id ? terms[course.id.charAt(0)] : ''
+);
+/*getcoursenumber modificado para sacar nulls*/
 const getCourseNumber = course => (
-  course.id.slice(1, 4)
+  course && course.id ? course.id.slice(1, 4) : ''
 );
 
 const Course = ({ course }) => (
@@ -60,25 +66,57 @@ const Course = ({ course }) => (
   </div>
 );
 
-const CourseList = ({ courses }) => (
-  <div className="course-list">
-  { Object.values(courses).map(course => <Course key={course.id} course={ course } />) }
-  </div>
+/*courseList modificado*/
+const CourseList = ({ courses }) => {
+  
+  const [term, setTerm] = useState('Fall');
+/*los errores vuelven con el termCourses, setTerm y useState*/
+  const termCourses = Object.values(courses).filter(course => term === getCourseTerm(course));
+  return (
+  <>
+    <TermSelector term={term} setTerm={setTerm}/>
+    <div className="course-list">
+    { termCourses.map(course => <Course key={course.id} course={ course } />) }
+    </div>
+  </>);
+}
+
+
+/*term button modificado*/
+const TermButton = ({term, setTerm, checked}) => (
+  <>
+    <input type="radio"id={term} className="btn-check" checked = {checked} autoComplete="off" onChange={() => setTerm(term)}/>
+    <label className="btn btn-success m-1 p-2" htmlFor={term}>
+    { term }
+    </label>
+  </>
 );
 
+/*term selector modificado*/
+const TermSelector = ({term, setTerm}) => (
+  <div className="btn-group">
+  { 
+    Object.values(terms)
+      .map(value => (<TermButton key={value} term={value} setTerm ={setTerm}checked={value === term}/>))
+  }
+  </div>
+);
+/*main, data modificado*/
 const Main = () =>  {
-  const { schedule: data, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['schedule'],
     queryFn: fetchSchedule
   });
   
+  console.log(data);
+
   if (error) return <h1>{error}</h1>;
-  if (isLoading) return <h1>Loading the schedule...</h1>
+  if (isLoading || !data) return <h1>Loading the schedule...</h1>
 
   return (
     <div className="container">
-      <Banner title={ schedule.title } />
-      <CourseList courses={ schedule.courses } />
+      <Banner title={ data.title } />
+      <CourseList courses={ data.courses } />
     </div>
   );
 };

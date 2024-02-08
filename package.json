@@ -10,6 +10,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@react-query-firebase/database": "^1.0.0-dev.2",
     "bootstrap": "^5.3.2",
     "firebase": "^10.8.0",
     "react": "^18.2.0",

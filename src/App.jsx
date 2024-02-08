@@ -4,13 +4,10 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import React from 'react';
 import { Banner } from './components/banner';
 import { CourseList } from './components/courses';
-import { Course } from './components/courses';
-import { TermButton } from './components/terms';
-import { TermSelector } from './components/terms';
-
 import { addScheduleTimes } from './utitlities/functions';
 import {useData} from './utitlities/firebase';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import EditForm from './components/EditForm';
 
 
 
@@ -26,20 +23,24 @@ const fetchSchedule = async () => {
 /*despues del useData notendria que ir '/courses'?*/
 const Main = () =>  {
   
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['schedule'],
-    queryFn: fetchSchedule
-  });
-
-
+  const [data, loading, error] = useData('/', addScheduleTimes);
+ 
   
   if (error) return <h1>{error}</h1>;
-  if (isLoading) return <h1>Loading the schedule...</h1>
+  if (loading) return <h1>Loading the schedule...</h1>
 
   return (
     <div className="container">
       <Banner title={ data.title } />
-      <CourseList courses={ data.courses } />
+      <BrowserRouter>
+        <Routes>
+            <Route path='/' element ={ <CourseList courses={ data.courses} />} />
+            <Route path='/edit' element={<EditForm />} />
+
+        </Routes>
+      </BrowserRouter>
+      
+      
     </div>
   );
 };

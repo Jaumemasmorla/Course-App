@@ -2,8 +2,8 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import useForm from "./UseForm";
 
-import { setData } from "../utitlities/firebase";
-import{validateCourseData} from '../utitlities/functions'
+import { setData } from "../utitlities/Firebase";
+import{validateCourseData} from '../utitlities/Functions'
 
 
  

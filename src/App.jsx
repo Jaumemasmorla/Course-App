@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider} from "react-query";
 import React from 'react';
 import { Banner } from './components/Banner';
 import { CourseList } from './components/Courses/CourseList';
-import { addScheduleTimes } from './utitlities/functions';
-import {useData} from './utitlities/firebase';
+import { addScheduleTimes } from './utitlities/Functions';
+import {useData} from './utitlities/Firebase';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import EditForm from './components/EditForm';
 
@@ -20,7 +20,7 @@ const fetchSchedule = async () => {
   if (!response.ok) throw response;
   return addScheduleTimes(await response.json());
 };
-/*despues del useData notendria que ir '/courses'?*/
+
 const Main = () =>  {
   
   const [data, loading, error] = useData('/', addScheduleTimes);

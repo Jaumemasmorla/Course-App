@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-import { getCourseTerm } from "../../utitlities/functions";
+import { getCourseTerm } from "../../utitlities/Functions";
 
 import { TermSelector } from '../Terms/TermSelector';
 

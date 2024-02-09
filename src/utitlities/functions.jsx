@@ -1,7 +1,7 @@
 
 
 
-import {terms, meetsPat, days} from './variables'
+import {terms, meetsPat, days} from './Variables'
 
 
 

@@ -1,4 +1,4 @@
-import React from "react";
+
 
 
 import {terms, meetsPat, days} from './variables'
@@ -70,3 +70,16 @@ export const hasConflict = (course, selected) => (
     && timeConflict(course1, course2)
   );
   
+
+  export const isValidMeets = (meets) => {
+    const parts = timeParts(meets);
+    return (meets === '' || (parts.days && !isNaN(parts.hours?.start) && !isNaN(parts.hours?.end)));
+  };
+  
+  export const validateCourseData = (key, val) => {
+    switch (key) {
+      case 'title': return /(^$|\w\w)/.test(val) ? '' : 'must be least two characters';
+      case 'meets': return isValidMeets(val) ? '' : 'must be days hh:mm-hh:mm';
+      default: return '';
+    }
+  };

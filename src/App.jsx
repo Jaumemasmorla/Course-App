@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+
 import './App.css';
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { QueryClient, QueryClientProvider} from "react-query";
 import React from 'react';
-import { Banner } from './components/banner';
-import { CourseList } from './components/courses';
+import { Banner } from './components/Banner';
+import { CourseList } from './components/Courses/CourseList';
 import { addScheduleTimes } from './utitlities/functions';
 import {useData} from './utitlities/firebase';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
